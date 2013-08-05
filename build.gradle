@@ -1,0 +1,45 @@
+apply plugin: 'idea'
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+    maven {
+        url "http://repository.jboss.org/nexus/content/groups/public"
+    }
+}
+
+dependencies {
+    compile 'com.yammer.dropwizard:dropwizard-views:0.6.2',
+            'com.yammer.dropwizard:dropwizard-core:0.6.2',
+            'org.infinispan:infinispan-core:5.2.1.Final'
+}
+
+idea {
+    project {
+        jdkName = '1.7'
+        languageLevel = '1.7'
+    }
+}
+
+ext.mainclass = 'spike.dropwizard.infinispan.InfinispanService'
+
+task copyToLib(dependsOn: jar, type: Copy) {
+    into "$buildDir/output/lib"
+    from configurations.runtime
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': project.mainclass
+        def manifestClasspath = configurations.runtime.collect { 'lib/' + it.getName() }.join(' ')
+        attributes 'Class-Path': manifestClasspath
+    }
+
+    archiveName = "${baseName}.jar"
+
+    destinationDir = file("$buildDir/output")
+}
+
+task zip(dependsOn: copyToLib, type: Zip) {
+    from "$buildDir/output"
+}

@@ -1,0 +1,9 @@
+http:
+  port: 9080
+  adminPort: 9081
+
+infinispanConfiguration:
+  bindAddress: 127.0.0.1
+  initialHosts: localhost[7800],localhost[7801]
+  clusterName: test-cluster
+  type: clustered

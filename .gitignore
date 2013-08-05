@@ -1,0 +1,6 @@
+infinispan.iml
+infinispan.ipr
+infinispan.iws
+build
+out
+.gradle
